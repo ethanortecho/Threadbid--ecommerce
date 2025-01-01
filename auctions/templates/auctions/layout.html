@@ -1,0 +1,70 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}ThreadBid{% endblock %}</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=Noto+Sans:wght@100..900&family=Parkinsans&family=Raleway&display=swap" rel="stylesheet">
+<link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+    <body>
+        
+        <div class ="d-flex justify-content-between upper-container">
+            <h1 class="thread-bid-logo">
+                <a  href="{% url 'index' %}">ThreadBid</a>
+            </h1>
+
+            <div class="search-container">
+                <form action="{% url 'search_results' %}" method="GET">
+                    <div class="search-bar">
+                        <input class='search-input' type="text" name="query" placeholder="Search for brand, color, etc">
+
+                    </div>
+                </form>
+            </div>
+            
+            <div class="upper-container-links">
+                <ul class="upper-container-links">
+                    <li class="nav-item">
+                        <a class="sell-now-link" href="{% url 'create_listing' %}">Sell Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'watchlist' %}">My Watchlist</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_listings' %}">Active Listings</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                </ul>
+
+            </div>
+            
+            
+            
+
+        </div>
+        
+        
+        
+        <hr>
+        {% block body %}
+        {% endblock %}
+        {% load django_browser_reload %}
+        {% django_browser_reload_script %}
+    </body>
+</html>

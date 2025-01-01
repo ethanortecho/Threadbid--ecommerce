@@ -1,0 +1,81 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<div class="create-listing-container">
+
+<div class="create-listing-details-container">
+    <div class="create-listing-label">
+        <p>Create Listing</p>    
+    </div>
+    <hr>
+
+
+    <div>
+
+        <form method="post"  enctype="multipart/form-data">
+            {% csrf_token %}
+    </div>
+    <div class="cl-details-div">
+        <label for="images">Upload Images:</label>
+        <input type="file" id="images" name="images" multiple required>
+    </div>
+    <div class="cl-details-div">
+        <p class="cl-common-label">What Is The Product Called?</p>
+
+            <input class="cl-common-form"
+                type="text" 
+                id="Title" 
+                name="title" 
+                placeholder="Title"
+                required>
+    </div>
+    <div class="cl-details-div">
+        <p class="cl-common-label">Description</p>
+            <input class="cl-common-form"
+                type="text" 
+                id="Description" 
+                name="description" 
+                placeholder="eg. medium red nike t-shirt, only worn a few times" 
+                required>
+    </div>
+    <div class="cl-details-div">
+        <p class= "cl-common-label" >Condition</p>
+            <select  class="cl-common-form" id="condition" name="condition" required>
+                {% for value, label in condition_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+    </div>
+    <div class="cl-details-div">
+        <p class= "cl-common-label">Size</p>
+        <select class="cl-common-form" id="size" name="size" required>
+            {% for value, label in size_choices %}
+            <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="cl-details-div">
+        <p class= "cl-common-label">Category</p>
+            <select  class="cl-common-form" id="category" name="category" required>
+                {% for value, label in category_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+    </div>
+    <div class="cl-details-div">
+        <p class= "cl-common-label">Enter Starting Price</p>
+            <input class="cl-common-form"
+                type="number" 
+                min=1
+                id="starting_price" 
+                name="starting_price" 
+                required>
+    </div>
+    
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+    </form>
+</div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<div class="my-listings-container">
+    <div class="my-listings-rows">
+        {%if watchlist %}
+
+        {% for watchlist_item in watchlist %}
+            <hr>
+            
+            <div class="ml-listing-container">
+                {% with watchlist_item.listing.images.all|first as first_image %}
+                {% if first_image %}
+                <a href="{% url 'listing' watchlist_item.listing.id %}">
+                <img class="ml-row-photo"  src="{{ first_image.image.url }}" alt="Image for {{listing.title}}">
+                {% else %}
+                <p>Image not available</p>
+                {% endif %}
+                {% endwith %}
+                </a>
+                <div class="ml-row-text">
+                    <div class="ml-row-title-price">
+                        <p>{{watchlist_item.listing.title}}</p>
+                        <p>${{watchlist_item.listing.minimum_bid}}</p>
+                    </div>
+                    <div class="ml-row-description">
+                        <p>{{watchlist_item.listing.description}}</p>
+                    </div>
+                    <div class="ml-row-size-condition">
+                        <p>{{watchlist_item.listing.size}} - {{watchlist_item.listing.condition}}</p>
+                    </div>
+                </div>
+                <div class="ml-delete-container">
+                    <form method="post" action="{% url 'delete_watchlist_item' watchlist_item.id %}">
+                        {% csrf_token %}
+                    <input type="hidden" name="form_type" value="watchlist">
+    
+    
+    
+                    <button class="ml-delete-button" type="submit" class="delete-button">Del</button>
+                    </form>
+    
+    
+                </div>   
+
+            </div>
+
+            
+            
+            
+    
+
+
+            {% endfor %}
+
+
+
+
+
+        {% else %}
+        <p class="no-listings-message">Watchlist is empty</p>
+        {% endif %}
+
+
+
+        
+    </div>
+</div>
+    
+
+
+
+{% endblock %}

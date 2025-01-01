@@ -1,0 +1,46 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div class="suggested-for-you">
+    <p>Matching Results...</p>
+</div>
+    <div class="grid-container">
+
+
+{% for listing in matching_listings %}
+    <div class="grid-listing">
+        <div class="grid-listing-image">
+            {% with listing.images.all|first as first_image %}
+        {% if first_image %}
+        <a href="{% url 'listing' listing.id %}">
+        <img src="{{ first_image.image.url }}" alt="Image for {{listing.title}}">
+        </a>
+        {% else %}
+        <p>Image not available</p>
+        {% endif %}
+        {% endwith %}
+        </div>
+        <div class="grid-listing-info-container">
+            <div class="grid-listing-price">
+                <p class="grid-listing-price">${{ listing.minimum_bid }}<p>
+    
+            </div>
+            <div class="grid-listing-size">   
+                <p>{{ listing.size}}</p>
+                
+
+            </div>
+        </div>
+        
+
+
+
+    </div>
+    
+
+    
+{% endfor %}
+</div>
+
+
+{% endblock %}

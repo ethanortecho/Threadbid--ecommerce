@@ -1,0 +1,471 @@
+
+hr {
+    all: unset; /* Clears all browser styles */
+    display: block; /* Ensures it's a block-level element */
+    width: 100%; /* Default to span full width */
+    height: 1px; /* Sets a default line thickness */
+    background-color: #ccc; /* Default line color */
+    margin: 0.5em 0; /* Default spacing */
+  }
+
+
+body {
+    padding: 25px;
+    font-family: 'Afacad Flux';
+}
+
+.suggested-for-you{
+    padding-left: 25px;
+    margin-top:75px;
+    font-size:40px;
+    font-weight: 600;
+}
+
+.upper-container {  position: fixed;
+    top: 0; /* Sticks to the top of the viewport */
+    width: 100%; /* Ensure it spans the full width of the page */
+    z-index: 100; /* Ensure it stays above other content */
+    background-color: white; /* Maintain background color */
+    padding: 20px;
+    border-bottom: 1px solid #ccc; /* Optional: Add a separator line */
+}
+
+
+.thread-bid-logo a {
+    color: black
+}
+
+
+.thread-bid-logo:hover {
+    text-decoration: none;
+}
+
+.search-container {
+    display: flex;
+    
+}
+.search-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 750px;
+    height: 50px;
+    border: 1px solid #acabab;
+    border-radius: 15px;
+    font-size: 15px;
+    background-color: rgb(244, 242, 242);
+}
+
+.search-bar:hover {
+    border-color: rgb(0, 0, 0);
+    border-width: 1px;
+
+}
+
+
+.search-input {
+    height: 100%;
+    flex: 1;
+    font-size: 20px;
+    font-style: italic;
+    color: black;
+    background-color: transparent;
+    padding-left: 25px;
+    border: transparent;
+    outline: none;
+}
+
+.upper-container-links{
+    font-weight: 700;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    padding-right: 25px;
+    align-items: center;
+}
+
+.sell-now-link{
+    color: white;
+    background-color: black;
+    padding: 15px;
+
+}
+.watchlist-link{
+
+    color: black;
+}
+
+
+
+
+.grid-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px; /* Space between grid items */
+    padding: 20px;
+    margin: 0 auto;
+
+}
+
+.grid-listing {
+    border: 1px solid #c1c1c1;
+    max-width: 350px;
+    max-height: 425px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.grid-listing-image {
+    overflow: hidden;
+    width: 350px;
+    height: 350px;
+}
+.grid-listing-info-container {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+}
+
+
+
+.grid-listing-price {
+    flex: 1;
+    text-align: left;
+    font-weight: 600;
+    font-size: 30px;
+
+    
+}
+
+.grid-listing-size{
+    font-family: 'Noto Sans';
+    flex: 1;
+    text-align: right;
+    font-weight: 250;
+    align-items: center;
+
+}
+.grid-listing-image img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.listing-container{
+    margin-top: 75px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+
+}
+.listing-details-container{
+    display: flex;
+    font-family: 'Alfacad Flux', 'Noto Sans';
+    width: 1248px;
+    padding-top: 25px;
+    justify-content: center;
+    width: 100%;
+}
+
+
+
+.photo-column{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+
+    
+}
+.photo-column img{
+    width: 100%;
+    max-width:600px;
+    max-height: 600px;
+}
+
+.text-column{  
+    position: sticky;  
+    width: 400px;
+    top: 125px;
+    min-height:fit-content;
+    max-height: 100vh;
+    overflow-y: auto;
+    font-family: 'Afacad Flux', 'Noto Sans';
+    flex-direction: column; /* Stacks text elements vertically */
+    align-items: flex-start; /* Aligns text to the left */
+    gap: 15px; /* Adds spacing between text elements */
+    padding-left: 20px; /* Adds spacing between text and images */
+}
+.title-options-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.listing-title{
+    font-size: 30px;
+    font-weight: 350;
+
+
+}
+.delete-listing-button{
+    background-color: #df1815;
+    color: white;
+    border: none;
+
+
+}
+
+
+.listing-price{
+    font-size: 30px;
+    font-weight: 700;
+    
+}
+
+.listing-condition{
+    font-size: 20px;
+}
+
+.bid-container {
+    display: flex;
+    flex-direction: column; /* Stack the form and button vertically */
+    align-items: stretch; /* Ensure full width for children */
+    max-width: 400px; /* Optional: Limit container width */
+    margin: 0 auto; /* Center the container */
+}
+
+.bid-form {
+    max-height: 100px; /* Restrict form height */
+    height: 100%;
+    width: 100%; /* Ensure the form takes full width */
+}
+
+.bid-form input {
+    border:black 1px solid;
+    margin-bottom: 10px;
+    width: 100%; /* Input stretches inside form */
+    height: 100%; /* Match form's height */
+    padding: 11px; /* Add internal spacing */
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.bid-button {
+    max-height: 50px; /* Restrict button height */
+    height: 100%;
+    width: 100%; /* Ensure button takes full width */
+    font-size: 20px; /* Adjust text size to fit the height */
+    color: white;
+    background-color: black;
+    border: none;
+    padding: 10px; /* Add internal spacing */
+    box-sizing: border-box; /* Include padding in dimensions */
+    text-align: center;
+    cursor: pointer;
+}
+
+.bid-button:hover{
+    background-color:  #313131;
+
+}
+
+
+
+.add-to-watchlist-container{
+    display: flex;
+    margin-top: 15px;
+    max-height: 50px;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.add-to-watchlist-container form{
+    width: 100%;
+    height: 100%;
+}
+
+.add-to-watchlist-button{
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    color: black;
+    box-sizing:border-box;
+    border: black 1px solid;
+}   
+.add-to-watchlist-button:hover{
+    color:  #898989;
+    border: #575555 1px solid;
+
+}
+
+
+.description-container{
+    width: 100%; /* Makes it span the full width of its parent */
+    font-size: 20px; /* Control text size */
+    line-height: 1.5; /* Improve readability for wrapped lines */
+    overflow-wrap: break-word; /* Ensure long words break properly */
+    white-space: normal; /* Allow text to wrap to the next line */
+    text-align: left; /* Align text for better readability */
+    margin-top: 50px;
+    margin-bottom: 10px; /* Add spacing below */
+    
+
+}
+
+
+.comments-container{
+    max-height: 200px;
+    overflow-y: auto;
+
+    padding-top: 25px;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+    
+}
+
+
+.create-listing-container{
+    margin-top: 75px;
+    display: flex;
+    justify-content: center;
+
+    width: 100%;
+   
+    
+    
+}
+.create-listing-details-container{
+    
+    display: flex;
+    flex-direction: column;
+    font-family: 'Afacad Flux';
+    font-size: 20px;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+
+
+}
+
+
+.cl-common-label{
+    font-size: 25px;
+    justify-content: center;
+    font-weight: 500;
+
+}
+
+.cl-common-form{
+    padding-left: 10px;
+    background-color: white;
+    width: 600px;
+    height: 45px;
+
+    border: #313131 1px solid;
+}
+
+.create-listing-label{
+
+    width: 100%;
+    align-items: start;
+    
+    font-size: 50px;
+    font-weight: 500;
+}
+
+
+.cl-details-div{
+    margin-top: 40px;
+}
+
+
+.my-listings-container{
+    font-family: 'Afacad Flux', 'Noto Sans';
+
+    margin-top: 75px;
+    display: flex;
+    
+    justify-content: center;
+
+    width: 100%;
+   
+}
+.my-listing-rows{
+
+    display: flex;
+    
+    font-family: 'Afacad Flux';
+    font-size: 20px;
+    width: 600px;
+    justify-content: center;
+    align-items: center;
+
+
+} 
+
+.ml-listing-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 750px;
+    height: 125px;
+
+}
+
+
+.ml-row-photo{
+    height: 123px;
+    width: 123px;
+}
+.ml-row-text{
+    display: flex;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+}
+.ml-row-text p {
+    margin: 0; /* Remove default margins */
+    line-height: 1.2; /* Adjust line spacing (optional) */
+}
+
+.ml-row-title-price{
+    font-size: 30px;
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+
+}
+.ml-row-description{
+    font-size: 20px;
+
+
+}
+
+.ml-row-size-condition{
+    font-size: 20px;
+
+
+}
+
+.ml-delete-container{
+    
+}
+
+.ml-delete-button{
+   
+}
+
+.no-listings-message{
+    font-size: 40px;
+}

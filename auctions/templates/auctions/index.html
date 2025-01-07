@@ -1,13 +1,26 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-<div class="suggested-for-you">
-    <p>Suggested for you...</p>
+
+<div>
+    <ul class="index-category-container">
+        {% for value, label in category_choices %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'search_results' %}?category={{value}}">{{ label }}</a>
+        </li>
+        {% endfor %}
+
+    </ul>
+
+    
+    
 </div>
+<hr>
     <div class="grid-container">
 
 
 {% for listing in listings %}
+    
     <div class="grid-listing">
         <div class="grid-listing-image">
             {% with listing.images.all|first as first_image %}

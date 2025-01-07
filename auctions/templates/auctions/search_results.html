@@ -1,46 +1,91 @@
 {% extends "auctions/layout.html" %}
+{% load static %}
 
 {% block body %}
-<div class="suggested-for-you">
-    <p>Matching Results...</p>
-</div>
-    <div class="grid-container">
+<script src="{% static 'auctions/filter.js' %}"></script>
 
+<div class="search-results-container">
+    {% if query %}
+    <h1>"{{ query }}" <span class="results-count">({{ matching_listings|length }} results)</span></h1>
 
-{% for listing in matching_listings %}
-    <div class="grid-listing">
-        <div class="grid-listing-image">
-            {% with listing.images.all|first as first_image %}
-        {% if first_image %}
-        <a href="{% url 'listing' listing.id %}">
-        <img src="{{ first_image.image.url }}" alt="Image for {{listing.title}}">
-        </a>
-        {% else %}
-        <p>Image not available</p>
-        {% endif %}
-        {% endwith %}
-        </div>
-        <div class="grid-listing-info-container">
-            <div class="grid-listing-price">
-                <p class="grid-listing-price">${{ listing.minimum_bid }}<p>
+    {% elif category %}
+        <h1>
+            Category: "
+            {% for value, label in category_choices %}
+                {% if value == category %}
+                    {{ label }}
+                {% endif %}
+            {% endfor %}
+            " <span class="results-count">({{ matching_listings|length }} results)</span>
+        </h1>
+    {% endif %}
+
     
-            </div>
-            <div class="grid-listing-size">   
-                <p>{{ listing.size}}</p>
-                
-
-            </div>
-        </div>
-        
+    <!-- Query Results Text -->
+    <hr>
 
 
-
+    <!-- Filter Container -->
+    <div class="filter-container">
+        <select id="category-select" name="category">
+            <option value="all">Category</option>
+            {% for value, label in category_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+        <select id="size-select" name="size">
+            <option value="all">Size</option>
+            {% for value, label in size_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
+        <select id="condition-select" name="condition">
+            <option value="all">Condition</option>
+            {% for value, label in condition_choices %}
+                <option value="{{ value }}">{{ label }}</option>
+            {% endfor %}
+        </select>
     </div>
-    
+
 
     
-{% endfor %}
 </div>
 
 
+    
+
+    <div class="grid-container" id="listings">
+        {% for listing in matching_listings %}
+        <div class="grid-listing" 
+             data-category="{{ listing.category }}"
+             data-condition="{{ listing.condition }}"
+             data-size="{{ listing.size }}"
+             data-price="{{ listing.minimum_bid }}">
+            <div class="grid-listing-image">
+                {% with listing.images.all|first as first_image %}
+                {% if first_image %}
+                <a href="{% url 'listing' listing.id %}">
+                    <img src="{{ first_image.image.url }}" alt="Image for {{listing.title}}">
+                </a>
+                {% else %}
+                <p>Image not available</p>
+                {% endif %}
+                {% endwith %}
+            </div>
+            <div class="grid-listing-info-container">
+                <div class="grid-listing-price">
+                    <p class="grid-listing-price">${{ listing.minimum_bid }}</p>
+                </div>
+                <div class="grid-listing-size">   
+                    <p>{{ listing.size }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'auctions/search.css' %}" rel="stylesheet">
 {% endblock %}

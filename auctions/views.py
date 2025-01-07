@@ -5,11 +5,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from .models import Bids, User, Listing, ListingImage, Comments, Watchlist
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
     listings = Listing.objects.all()
-    return render(request, "auctions/index.html", {'listings': listings})
+    return render(request, 
+                  "auctions/index.html",
+                    {'listings': listings,
+                    "category_choices": Listing.CATEGORY_CHOICES,}
+                  )
 
 def add_to_watchlist(request, id):
     if request.method == "POST":
@@ -17,6 +22,7 @@ def add_to_watchlist(request, id):
         Watchlist.objects.get_or_create(user=request.user, listing=listing)
         return redirect('listing', id=id)  # Redirect back to the listing page
 
+@login_required(login_url='login')
 def watchlist(request):
     watchlist = Watchlist.objects.filter(user = request.user)
     return render(request, "auctions/watchlist.html", {'watchlist' : watchlist})
@@ -26,7 +32,7 @@ def my_listings(request):
     user_listings = Listing.objects.filter(seller=request.user)
     return render(request, "auctions/my_listings.html", {'user_listings': user_listings})
 
-
+@login_required(login_url='login')
 def listing(request, id):
     listing = get_object_or_404(Listing, id=id)
 
@@ -58,6 +64,7 @@ def listing(request, id):
 
  
 
+@login_required(login_url='login')
 def create_listing(request):
     if request.method=="POST":
         title = request.POST["title"]
@@ -127,24 +134,30 @@ def end_listing(request, id):
         listing.status = False
 
 def search(request):
-     #request.GET retrieves the request content, '.get' is the familiar python syntax to get at a certain value using a key, and if the key doesn't exist, it returns ''
-     query = request.GET.get('query', '').strip()
+    query = request.GET.get('query', '').strip()
+    category = request.GET.get('category', '').strip()
 
-# Ensure you're filtering only when a query exists
-     query = request.GET.get('query', '').strip()
 
-# Ensure you're filtering only when a query exists
-     if query:
+    if query:
         matching_listings = Listing.objects.filter(title__icontains=query)
-     else:
+    elif category:
+        matching_listings = Listing.objects.filter(category__iexact = category)
+    else:
         matching_listings = []
 
-    
-     return render(request, "auctions/search_results.html", {
+    return render(request, "auctions/search_results.html", {
         "matching_listings": matching_listings,
         "query": query,
-        "message": f"Search results for '{query}'" if matching_listings else f"There were no results for '{query}'"
+        "category": category,
+        "message": f"Search results for '{query}'" if matching_listings else f"There were no results for '{query}'",
+        "category_choices": Listing.CATEGORY_CHOICES,
+        "condition_choices": Listing.CONDITION_CHOICES,
+        "size_choices": Listing.SIZE_CHOICES
     })
+
+
+    
+
 
 
 def login_view(request):

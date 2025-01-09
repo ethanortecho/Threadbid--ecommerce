@@ -1,11 +1,13 @@
 from pyexpat.errors import messages
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.urls import reverse
 from .models import Bids, User, Listing, ListingImage, Comments, Watchlist
 from django.contrib.auth.decorators import login_required
+import json
+from django.utils import timezone
 
 
 def index(request):
@@ -37,29 +39,88 @@ def listing(request, id):
     listing = get_object_or_404(Listing, id=id)
 
     if request.method == "POST":
-        form_type = request.POST.get("form_type")
-        if form_type == "bid":
+        # Check if it's an AJAX request
+        if request.headers.get('Content-Type') == 'application/json':
             try:
-                bid_amount = float(request.POST["bid_amount"])
-            except ValueError:
-                messages.error(request, "Please enter a valid number.")
-                return redirect("listing", id=id)
-            
-            if bid_amount >= listing.minimum_bid():
-                Bids.objects.create(
-                    listing=listing,
-                    user = request.user,
-                    bid= bid_amount
-                )
+                data = json.loads(request.body)
                 
-        elif form_type == "comment":
-            Comments.objects.create(
+                # Handle AJAX bid submissions
+                if data.get('form_type') == 'bid':
+                    try:
+                        bid_amount = float(data.get('bid_amount'))
+                        if bid_amount >= listing.minimum_bid():
+                            Bids.objects.create(
+                                listing=listing,
+                                user=request.user,
+                                bid=bid_amount
+                            )
+                            return JsonResponse({
+                                'success': True,
+                                'new_minimum_bid': listing.minimum_bid(),
+                            })
+                        else:
+                            return JsonResponse({
+                                'success': False,
+                                'error': 'Bid must be at least the minimum amount'
+                            })
+                    except ValueError:
+                        return JsonResponse({
+                            'success': False,
+                            'error': 'Invalid bid amount'
+                        })
+                
+                # Handle AJAX comment submissions (existing code)
+                elif data.get('content'):
+                    content = data.get('content')
+                    if not content:
+                        return JsonResponse({'success': False, 'error': 'Comment cannot be empty'})
+                        
+                    new_comment = Comments.objects.create(
+                        listing=listing,
+                        user=request.user,
+                        content=content
+                    )
+                    
+                    return JsonResponse({
+                        'success': True,
+                        'comment': {
+                            'username': request.user.username,
+                            'content': new_comment.content,
+                            'created_at': new_comment.created_at.strftime("%B %d, %Y, %I:%M %p")
+                        }
+                    })
+
+            except json.JSONDecodeError:
+                return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+        
+        # Handle regular form submissions (existing code)
+        else:
+            form_type = request.POST.get("form_type")
+            if form_type == "bid":
+                try:
+                    bid_amount = float(request.POST["bid_amount"])
+                except ValueError:
+                    messages.error(request, "Please enter a valid number.")
+                    return redirect("listing", id=id)
+                
+                if bid_amount >= listing.minimum_bid():
+                    Bids.objects.create(
+                        listing=listing,
+                        user=request.user,
+                        bid=bid_amount
+                    )
+            elif form_type == "comment":
+                Comments.objects.create(
                     listing=listing,
-                    user = request.user,
-                    content = request.POST["comment"]
+                    user=request.user,
+                    content=request.POST["comment"]
                 )
+
     comments = listing.comments.all()
-    return render(request, "auctions/listing.html", {"listing": listing,'comments':comments})
+    return render(request, "auctions/listing.html", {
+        "listing": listing,
+        'comments': comments
+    })
 
 
  
@@ -210,3 +271,33 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "auctions/register.html")
+
+@login_required(login_url='login')
+def comment(request, listing_id):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            content = data.get('content')
+            
+            if not content:
+                return JsonResponse({'success': False, 'error': 'Comment cannot be empty'})
+                
+            listing = get_object_or_404(Listing, id=listing_id)
+            new_comment = Comments.objects.create(
+                listing=listing,
+                user=request.user,
+                content=content
+            )
+            
+            return JsonResponse({
+                'success': True,
+                'comment': {
+                    'username': request.user.username,
+                    'content': new_comment.content,
+                    'created_at': new_comment.created_at.strftime("%B %d, %Y, %I:%M %p")
+                }
+            })
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'error': 'Invalid JSON'})
+            
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})

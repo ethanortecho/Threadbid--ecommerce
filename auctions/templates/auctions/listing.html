@@ -33,11 +33,10 @@
             <div class="listing-condition">
                 <p class="">{{ listing.size }} - {{ listing.get_condition_display }}</p>
             </div>
-            <div class="bid-container">
+            <div class="bid-container" data-listing-id="{{ listing.id }}">
                 <p>Enter your offer:</p>
-                <form class="bid-form" method="post">
+                <form class="bid-form">
                     {% csrf_token %}
-                    <input type="hidden" name="form_type" value="bid">
                     <input 
                         type="number" 
                         id="bidAmount" 
@@ -64,15 +63,21 @@
             <hr>
 
             <div class="comments-container">
-                {% for comment in comments %}
-                    <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</p>
+                {% regroup comments by created_at|date:"m.d.Y" as comments_by_date %}
+                {% for date_group in comments_by_date %}
+                    <div class="comment-date">{{ date_group.grouper }}</div>
+                    {% for comment in date_group.list %}
+                        <div class="comment">
+                            <p><strong>{{ comment.user.username }}:</strong> {{ comment.content }} <span style="color: #888; margin-left: auto;">{{ comment.created_at|date:"g:i A" }}</span></p>
+                        </div>
+                    {% endfor %}
                 {% empty %}
-                    <p>No comments yet. Be the first to comment!</p>
+                    <p class="no-comments">No comments yet. Be the first to comment!</p>
                 {% endfor %}
             </div>
             <hr>
             <div class="comment-form-container">
-                <form method="post" class="comment-form">
+                <form method="post" class="comment-form" data-listing-id="{{ listing.id }}">
                     {% csrf_token %}
                     <div class="input-wrapper">
                         <input 

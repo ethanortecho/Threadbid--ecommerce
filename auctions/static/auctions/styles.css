@@ -623,3 +623,44 @@ hr {
     font-weight: normal;
     margin: 0;
 }
+
+.comment-date {
+    text-align: center;
+    color: #888;
+    padding: 15px 0;
+    font-size: 0.9em;
+}
+
+.comment {
+    padding: 8px 0;
+}
+
+.bid-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: white;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+}
+
+.bid-notification.success {
+    background-color: #4CAF50;
+}
+
+.bid-notification.error {
+    background-color: #f44336;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
